@@ -1,2 +1,2 @@
-# yogolang-yogofn
+# yogofn
 Functional Map/Reduce/Filter for Golang
