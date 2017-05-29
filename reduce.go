@@ -22,9 +22,25 @@ import (
 //
 func Reduce(binary, collection interface{}, init ...interface{}) interface{} {
 
+	// Optimization for a common use case of reducing a float64 slice.
+	if f, ok := binary.(func(float64, float64) float64); ok {
+		if c, ok := collection.([]float64); ok {
+			var accum float64
+			if len(init) == 1 {
+				accum = init[0].(float64)
+			}
+			length := len(c)
+			for i := 0; i < length; i++ {
+				accum = f(c[i], accum)
+			}
+			return accum
+		}
+	}
+
 	typecheck(collection, reflect.Array, reflect.Slice)
 	typecheck(binary, reflect.Func)
 	binaryType := reflect.TypeOf(binary)
+
 	if binaryType.NumIn() != 2 ||
 		binaryType.NumOut() != 1 {
 		panic("Reduce expected arity-2 reducer: (func(T1,T2) T3), received (" + binaryType.String() + ")")

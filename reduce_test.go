@@ -1,6 +1,7 @@
 package yogofn
 
 import (
+	"math"
 	"testing"
 )
 
@@ -120,5 +121,18 @@ func BenchmarkMasLargoStandard(b *testing.B) {
 func BenchmarkMasLargoYogo(b *testing.B) {
 	for i := 0; i < 10000; i++ {
 		masLargoYogo()
+	}
+}
+
+func BenchmarkTotalFirst100Floats(b *testing.B) {
+	nums := make([]float64, 0)
+	for i := 1; i <= 100; i++ {
+		nums = append(nums, float64(i))
+	}
+	for i := 0; i < b.N; i++ {
+		total := Reduce(func(a, b float64) float64 { return a + b }, nums).(float64)
+		if math.Abs(total-5050.0) > 0.1 {
+			b.Fail()
+		}
 	}
 }
