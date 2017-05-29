@@ -4,6 +4,23 @@ import (
 	"reflect"
 )
 
+// Map takes a conversion function (mapper) and a collection(s) (i.e. an Array or Slice),
+// resulting in an output slice where each element is transformed.
+// The mapping function, the input collection and the output collection are all
+// typed as interface{}. The result is almost always going to require a cast.
+//
+// For instance, uppercasing names
+//
+//   upNames := Map(func(s string){ return strings.ToUpper(s) },names).([]string)
+//
+// Note that the number of collections in the uppercasing example is one.  However,
+// any number of input lists may be used.  Each input is iterated until one of them
+// is empty.  So, given and and low temperature lists, a temperature range might
+// be output.
+//
+//   tempRanges := Map(func(a,b float64) float64 {return math.Abs(a-b) },
+//						lows,highs).([]float64)
+//
 func Map(mapper interface{}, collections ...interface{}) interface{} {
 
 	typecheck(mapper, reflect.Func)

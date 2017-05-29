@@ -2,6 +2,17 @@ package yogofn
 
 import "reflect"
 
+// Filter takes a boolean predicate and a collection (i.e. an Array or Slice),
+// resulting in a reduced output slice where each element passes the predicate.
+// The predicate, the input collection and the output collection are all
+// typed as interface{}. The result is almost always going to require a cast.
+//
+// For instance, filtering out names with "Z" might be:
+//
+//   nonZs := Filter(
+//		func(name string){ return !strings.Contains(name,"Z"); },
+//		names).([]string)
+//
 func Filter(predicate, collection interface{}) interface{} {
 
 	typecheck(collection, reflect.Array, reflect.Slice)
