@@ -9,7 +9,7 @@ Here's standard Go code given two float64 slices.
 
 ```
 var maxDiff float64
-for i:=0; i<len(highs) && i<len(lows); i++){
+for i:=0; i<len(highs) && i<len(lows); i++ {
     maxDiff := math.Max(highs[i] - lows[i], maxDiff)
 }
 ```
@@ -19,3 +19,4 @@ widestDailyRange := Reduce(MaxF64, Map(SubF64, highs, lows)).(float64)
 ```
 
 Notice that the final outside operation (Reduce in this instance) required a cast to inform Go of the final type.  Inputs are either arrays or slices of any type.
+
