@@ -39,13 +39,13 @@ func TestSelection(t *testing.T) {
 }
 
 func BenchmarkFilterPerformanceStandard(b *testing.B) {
-	for i := 0; i < 20000; i++ {
+	for i := 0; i < b.N; i++ {
 		letterCNormal()
 	}
 }
 
 func BenchmarkFilterPerformanceYogo(b *testing.B) {
-	for i := 0; i < 20000; i++ {
+	for i := 0; i < b.N; i++ {
 		letterCYogo()
 	}
 }
