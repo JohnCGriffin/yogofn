@@ -10,7 +10,7 @@ Here's standard Go code given two float64 slices.
 ```
 var maxDiff float64
 for i:=0; i<len(highs) && i<len(lows); i++ {
-    maxDiff := math.Max(highs[i] - lows[i], maxDiff)
+    maxDiff = math.Max(highs[i] - lows[i], maxDiff)
 }
 ```
 And here's using yogofn:
