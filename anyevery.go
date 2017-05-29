@@ -11,7 +11,7 @@ const (
 	every
 )
 
-func _any_every(mode _mode, predicate interface{}, collections []interface{}) bool {
+func _anyEveryWorker(mode _mode, predicate interface{}, collections []interface{}) bool {
 
 	typecheck(predicate, reflect.Func)
 	predicateValue := reflect.ValueOf(predicate)
@@ -79,7 +79,7 @@ func _any_every(mode _mode, predicate interface{}, collections []interface{}) bo
 //       ...
 //
 func Any(predicate interface{}, collections ...interface{}) bool {
-	return _any_every(any, predicate, collections)
+	return _anyEveryWorker(any, predicate, collections)
 }
 
 // Every takes a predicate function and a collection(s) (i.e. an Array or Slice),
@@ -101,5 +101,5 @@ func Any(predicate interface{}, collections ...interface{}) bool {
 //       ...
 //
 func Every(predicate interface{}, collections ...interface{}) bool {
-	return _any_every(every, predicate, collections)
+	return _anyEveryWorker(every, predicate, collections)
 }

@@ -29,7 +29,7 @@ func Filter(predicate, collection interface{}) interface{} {
 
 	// Make empty result slice
 	resultType := reflect.SliceOf(reflect.TypeOf(collection).Elem())
-	var resultValue reflect.Value = reflect.Zero(resultType)
+	resultValue := reflect.Zero(resultType)
 
 	for i := 0; i < length; i++ {
 		v := collectionValue.Index(i)

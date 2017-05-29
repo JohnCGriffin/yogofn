@@ -55,7 +55,7 @@ func Map(mapper interface{}, collections ...interface{}) interface{} {
 
 	// empty output slice
 	resultType := reflect.SliceOf(reflect.TypeOf(mapper).Out(0))
-	var resultValue reflect.Value = reflect.Zero(resultType)
+	resultValue := reflect.Zero(resultType)
 
 	for i := 0; i < length; i++ {
 		vals := make([]reflect.Value, 0)
