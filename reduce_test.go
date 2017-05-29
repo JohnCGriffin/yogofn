@@ -52,14 +52,73 @@ func TestMasLargo(t *testing.T) {
 	}
 }
 
+func expectPanic(t *testing.T, thunk func()) {
+	defer func() {
+		if r := recover(); r == nil {
+			t.Errorf("The code did not panic")
+		}
+	}()
+	thunk()
+}
+
+func TestNoCollection(t *testing.T) {
+	expectPanic(t,
+		func() {
+			Any(func(a bool) bool { return a })
+		})
+}
+
+func TestWrongFilterArgs(t *testing.T) {
+	expectPanic(t,
+		func() {
+			Filter(func() bool { return true }, []int{})
+		})
+}
+
+func TestWrongFilterReturn(t *testing.T) {
+	expectPanic(t,
+		func() {
+			Filter(func(a bool) {}, []int{})
+		})
+}
+
+func TestMissingMapCollection(t *testing.T) {
+	expectPanic(t,
+		func() {
+			Map(func(a bool) {})
+		})
+}
+
+func TestReduceWithInitialValue(t *testing.T) {
+	if Reduce(func(a, b int) int { return a + b }, []int{1, 2, 3}, 10) != 16 {
+		t.Fail()
+	}
+}
+
+func TestReduceWithTooManyArguments(t *testing.T) {
+	defer func() {
+		if r := recover(); r == nil {
+			t.Errorf("The code did not panic")
+		}
+	}()
+	Reduce(func(a, b int) int { return a + b }, []int{1, 2, 3}, 10, 12345)
+}
+
+func TestBadReduceBinaryArity(t *testing.T) {
+	expectPanic(t,
+		func() {
+			Reduce(func(a bool) bool { return true }, []bool{})
+		})
+}
+
 func BenchmarkMasLargoStandard(b *testing.B) {
-	for i := 0; i < 20000; i++ {
+	for i := 0; i < 10000; i++ {
 		masLargoNormal()
 	}
 }
 
 func BenchmarkMasLargoYogo(b *testing.B) {
-	for i := 0; i < 20000; i++ {
+	for i := 0; i < 10000; i++ {
 		masLargoYogo()
 	}
 }

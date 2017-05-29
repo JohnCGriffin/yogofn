@@ -25,7 +25,8 @@ func Reduce(binary, collection interface{}, init ...interface{}) interface{} {
 	typecheck(collection, reflect.Array, reflect.Slice)
 	typecheck(binary, reflect.Func)
 	binaryType := reflect.TypeOf(binary)
-	if binaryType.NumIn() != 2 || binaryType.NumOut() != 1 {
+	if binaryType.NumIn() != 2 ||
+		binaryType.NumOut() != 1 {
 		panic("Reduce expected arity-2 reducer: (func(T1,T2) T3), received (" + binaryType.String() + ")")
 	}
 

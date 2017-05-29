@@ -35,6 +35,16 @@ func TestStringLength(t *testing.T) {
 	}
 }
 
+func TestAddNaturalsUnevenLengths(t *testing.T) {
+	nums := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
+	doubled := Map(func(a, b int) int { return a + b }, nums, nums[:10]).([]int)
+	for i := 0; i < len(nums) && i < len(doubled); i++ {
+		if nums[i]*2 != doubled[i] {
+			t.Fail()
+		}
+	}
+}
+
 func BenchmarkStringLengthPerformanceStandard(b *testing.B) {
 	for i := 0; i < 20000; i++ {
 		stringLengthsNormal()
