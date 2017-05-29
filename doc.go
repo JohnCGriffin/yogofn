@@ -29,6 +29,8 @@
 //      sum([ x*x for x in nums if x%2 == 0 ])
 //
 // That's for later...
+//
+// A few handy reducers are added for common math reductions: AddF64, SubF64, AddInt, SubInt
 package yogofn
 
 // let's not forget
