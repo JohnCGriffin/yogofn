@@ -20,7 +20,7 @@ var estados = []string{
 	"Nayarit",
 	"Nuevo León",
 	"Oaxaca",
-	"Puebla	",
+	"Puebla",
 	"Querétaro",
 	"Quintana Roo",
 	"San Luis Potosí",
