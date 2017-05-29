@@ -5,7 +5,7 @@ import (
 	"reflect"
 )
 
-// Reduce takes an binary reducer function, i.e. 2-arity,
+// Reduce takes an binary reducer function, i.e. (func(T1,T1) T2),
 // and a collection(s) (i.e. an Array or Slice),
 // resulting in scalar output the is the result of repeatedly applying the function to
 // the previous output and the next input element. The binary function, the input

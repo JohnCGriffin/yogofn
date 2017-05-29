@@ -78,7 +78,6 @@ func _any_every(mode _mode, predicate interface{}, collections []interface{}) bo
 //   if Any(bigRange,lows,highs){
 //       ...
 //
-
 func Any(predicate interface{}, collections ...interface{}) bool {
 	return _any_every(any, predicate, collections)
 }
@@ -101,7 +100,6 @@ func Any(predicate interface{}, collections ...interface{}) bool {
 //   if ! Every(wellOrdered,lows,highs){
 //       ...
 //
-
 func Every(predicate interface{}, collections ...interface{}) bool {
 	return _any_every(every, predicate, collections)
 }
