@@ -46,13 +46,13 @@ func TestAddNaturalsUnevenLengths(t *testing.T) {
 }
 
 func BenchmarkStringLengthPerformanceStandard(b *testing.B) {
-	for i := 0; i < 20000; i++ {
+	for i := 0; i < b.N; i++ {
 		stringLengthsNormal()
 	}
 }
 
 func BenchmarkStringLengthPerformanceYogo(b *testing.B) {
-	for i := 0; i < 20000; i++ {
+	for i := 0; i < b.N; i++ {
 		stringLengthsYogoFn()
 	}
 }

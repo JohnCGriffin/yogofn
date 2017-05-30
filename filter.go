@@ -10,10 +10,49 @@ import "reflect"
 // For instance, filtering out names with "Z" might be:
 //
 //   nonZs := Filter(
-//		func(name string){ return !strings.Contains(name,"Z"); },
+//		func(name string) bool { return !strings.Contains(name,"Z"); },
 //		names).([]string)
 //
 func Filter(predicate, collection interface{}) interface{} {
+
+	// common optimizations
+	{
+		switch f1 := predicate.(type) {
+
+		case func(string) bool:
+			if ss, ok := collection.([]string); ok {
+				result := make([]string, 0, len(ss))
+				for _, s := range ss {
+					if f1(s) {
+						result = append(result, s)
+					}
+				}
+				return result
+			}
+
+		case func(int) bool:
+			if ns, ok := collection.([]int); ok {
+				result := make([]int, 0, len(ns))
+				for _, n := range ns {
+					if f1(n) {
+						result = append(result, n)
+					}
+				}
+				return result
+			}
+
+		case func(float64) bool:
+			if fs, ok := collection.([]float64); ok {
+				result := make([]float64, 0, len(fs))
+				for _, f := range fs {
+					if f1(f) {
+						result = append(result, f)
+					}
+				}
+				return result
+			}
+		}
+	}
 
 	typecheck(collection, reflect.Array, reflect.Slice)
 	typecheck(predicate, reflect.Func)

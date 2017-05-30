@@ -35,6 +35,42 @@ func Map(mapper interface{}, collections ...interface{}) interface{} {
 		panic("Map requires at least one collection")
 	}
 
+	// common optimizations
+	if len(collections) == 1 {
+
+		collection := collections[0]
+
+		switch f1 := mapper.(type) {
+
+		case func(string) int:
+			if ss, ok := collection.([]string); ok {
+				result := make([]int, 0, len(ss))
+				for _, s := range ss {
+					result = append(result, f1(s))
+				}
+				return result
+			}
+
+		case func(int) int:
+			if ns, ok := collection.([]int); ok {
+				result := make([]int, 0, len(ns))
+				for _, n := range ns {
+					result = append(result, f1(n))
+				}
+				return result
+			}
+
+		case func(float64) float64:
+			if fs, ok := collection.([]float64); ok {
+				result := make([]float64, 0, len(fs))
+				for _, f := range fs {
+					result = append(result, f1(f))
+				}
+				return result
+			}
+		}
+	}
+
 	// make reflect.Value array to hold collection values
 	collectionValues := func() []reflect.Value {
 		tmp := make([]reflect.Value, 0)

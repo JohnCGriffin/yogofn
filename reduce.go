@@ -22,16 +22,40 @@ import (
 //
 func Reduce(binary, collection interface{}, init ...interface{}) interface{} {
 
-	// Optimization for a common use case of reducing a float64 slice.
-	if f, ok := binary.(func(float64, float64) float64); ok {
-		if c, ok := collection.([]float64); ok {
+	if len(init) > 1 {
+		panic(fmt.Sprintf("Reduce(collection,binaryFunction [,initValue]) received %d arguments", 2+len(init)))
+	}
+
+	// Common optimizations
+	{
+		switch t := binary.(type) {
+		case func(float64, float64) float64:
 			var accum float64
 			if len(init) == 1 {
 				accum = init[0].(float64)
 			}
-			length := len(c)
-			for i := 0; i < length; i++ {
-				accum = f(c[i], accum)
+			for _, f := range collection.([]float64) {
+				accum = t(f, accum)
+			}
+			return accum
+
+		case func(int, int) int:
+			var accum int
+			if len(init) == 1 {
+				accum = init[0].(int)
+			}
+			for _, n := range collection.([]int) {
+				accum = t(n, accum)
+			}
+			return accum
+
+		case func(string, string) string:
+			var accum string
+			if len(init) == 1 {
+				accum = init[0].(string)
+			}
+			for _, s := range collection.([]string) {
+				accum = t(s, accum)
 			}
 			return accum
 		}
@@ -53,12 +77,8 @@ func Reduce(binary, collection interface{}, init ...interface{}) interface{} {
 	resultType := reflect.TypeOf(binary).Out(0)
 	accum := reflect.Zero(resultType)
 
-	switch len(init) {
-	case 0:
-	case 1:
+	if len(init) == 1 {
 		accum = reflect.ValueOf(init[0])
-	default:
-		panic(fmt.Sprintf("Reduce(collection,binaryFunction [,initValue]) received %d arguments", 2+len(init)))
 	}
 
 	for i := 0; i < length; i++ {

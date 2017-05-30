@@ -15,13 +15,17 @@ func masLargoNormal() string {
 	return answer
 }
 
-func masLargoYogo() string {
-	return Reduce(func(a, b string) string {
+func masLargoYogo(init bool) string {
+	f := func(a, b string) string {
 		if len(a) > len(b) {
 			return a
 		}
 		return b
-	}, estados).(string)
+	}
+	if init {
+		return Reduce(f, estados, "Z").(string)
+	}
+	return Reduce(f, estados).(string)
 }
 
 func mismoLargo(a, b []int) bool {
@@ -47,8 +51,31 @@ func TestMismoTotal(t *testing.T) {
 func TestMasLargo(t *testing.T) {
 	// Empezemos normalmente, después con yogofn
 	regular := masLargoNormal()
-	yogo := masLargoYogo()
+	yogo := masLargoYogo(false)
 	if len(regular) != len(yogo) {
+		t.Fail()
+	}
+	yogo = masLargoYogo(true)
+	if len(regular) != len(yogo) {
+		t.Fail()
+	}
+}
+
+func TestOldestChild(t *testing.T) {
+	var ninos = []persona{
+		{"Becky", 12},
+		{"Javier", 8},
+		{"Shanika", 11},
+		{"Camila", 7},
+		{"Diego", 5},
+		{"Alejandro", 17},
+	}
+	if Reduce(func(a, b persona) persona {
+		if a.edad > b.edad {
+			return a
+		}
+		return b
+	}, ninos, ninos[0]).(persona).edad != 17 {
 		t.Fail()
 	}
 }
@@ -96,6 +123,19 @@ func TestReduceWithInitialValue(t *testing.T) {
 	}
 }
 
+func TestReduceMaxFloat(t *testing.T) {
+	nums := []float64{10.0, 20.0, 30.0}
+	if Reduce(math.Max, nums) != 30.0 {
+		t.Fail()
+	}
+	if Reduce(math.Max, nums, 50.0) != 50.0 {
+		t.Fail()
+	}
+	if Reduce(math.Max, nums, 22.0) != 30.0 {
+		t.Fail()
+	}
+}
+
 func TestReduceWithTooManyArguments(t *testing.T) {
 	defer func() {
 		if r := recover(); r == nil {
@@ -113,24 +153,45 @@ func TestBadReduceBinaryArity(t *testing.T) {
 }
 
 func BenchmarkMasLargoStandard(b *testing.B) {
-	for i := 0; i < 10000; i++ {
+	for i := 0; i < b.N; i++ {
 		masLargoNormal()
 	}
 }
 
 func BenchmarkMasLargoYogo(b *testing.B) {
-	for i := 0; i < 10000; i++ {
-		masLargoYogo()
+	for i := 0; i < b.N; i++ {
+		masLargoYogo(i%2 == 0)
 	}
 }
-
-func BenchmarkTotalFirst100Floats(b *testing.B) {
+func BenchmarkTotalNormal(b *testing.B) {
 	nums := make([]float64, 0)
 	for i := 1; i <= 100; i++ {
 		nums = append(nums, float64(i))
 	}
 	for i := 0; i < b.N; i++ {
-		total := Reduce(func(a, b float64) float64 { return a + b }, nums).(float64)
+		total := 0.0
+		for _, f := range nums {
+			total += f
+		}
+		if math.Abs(total-5050.0) > 0.1 {
+			b.Fail()
+		}
+	}
+}
+
+func BenchmarkTotalYogo(b *testing.B) {
+	nums := make([]float64, 0)
+	for i := 1; i <= 100; i++ {
+		nums = append(nums, float64(i))
+	}
+	for i := 0; i < b.N; i++ {
+		var total float64
+		if i%2 == 0 {
+			total = Reduce(func(a, b float64) float64 { return a + b }, nums).(float64)
+		} else {
+			total = Reduce(func(a, b float64) float64 { return a + b }, nums, 0.0).(float64)
+		}
+
 		if math.Abs(total-5050.0) > 0.1 {
 			b.Fail()
 		}

@@ -1,6 +1,7 @@
 package yogofn
 
 import (
+	"math"
 	"strings"
 	"testing"
 )
@@ -27,6 +28,46 @@ func mismo(a, b []string) bool {
 		return true
 	}
 	return (a[0] == b[0]) && mismo(a[1:], b[1:])
+}
+
+func TestFilterSmallInts(t *testing.T) {
+	if len(Filter(func(n int) bool { return 5 > n }, nums).([]int)) != 4 {
+		t.Fail()
+	}
+}
+
+func TestFilterSmallFloats(t *testing.T) {
+	floats := []float64{10.0, 11.0, 12.0, 20.0, 30.0}
+	if len(Filter(func(f float64) bool { return 20 > f }, floats).([]float64)) != 3 {
+		t.Fail()
+	}
+}
+
+func TestFilterNinos(t *testing.T) {
+	var ninos = []persona{
+		{"Becky", 12},
+		{"Javier", 8},
+		{"Shanika", 11},
+		{"Camila", 7},
+		{"Diego", 5},
+		{"Alejandro", 17},
+	}
+	if len(Filter(func(p persona) bool { return p.edad > 10 }, ninos).([]persona)) != 3 {
+		t.Fail()
+	}
+}
+
+func TestAbsoluteValueMap(t *testing.T) {
+	nums := make([]float64, 0)
+	for x := 0.0; x < 100.0; x++ {
+		nums = append(nums, x-30.0)
+	}
+	absValues := Map(math.Abs, nums).([]float64)
+	for _, x := range absValues {
+		if x < 0.0 {
+			t.Fail()
+		}
+	}
 }
 
 func TestSelection(t *testing.T) {
