@@ -32,3 +32,10 @@ zipped := Map(func(x,y string) []string { return []string{x,y} }, xs, ys).([]str
 ```
 A companion package is yogofn/reducers which contains simple but common scalar reductions for int and float64 numbers.
 
+#### Reflection Performance
+
+Not suprisingly, reflection slows down standard Go about 200 times.  Using Go's type switch, a few optimizations 
+were placed into Map/Filter/Reduce 
+for common data types float64, int, and string.  They run at normal speed.  There are no optimizations for Every or Any because I cannot think of a use case for the simple types.  Float32 optimizations will likely be added later for use within GopherJS.
+
+
