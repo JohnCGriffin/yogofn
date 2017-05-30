@@ -28,7 +28,7 @@ Notice that the final outside operation (Reduce in this instance) required a cas
 Notice that because Reduce and Map can take more than one list, Zip is effected via
 
 ```
-fullNames := Map(func(a,b string) string { return a + " " + b }, firstNames, lastNames).([]string)
+zipped := Map(func(x,y string) []string { return []string{x,y} }, xs, ys).([]string)
 ```
 A companion package is yogofn/reducers which contains simple but common scalar reductions for int and float64 numbers.
 
