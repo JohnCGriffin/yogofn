@@ -1,7 +1,7 @@
 # yogofn
 Functional Map/Reduce/Filter for Golang
 
-Given that Golang is typed and verbose, functional-style operations are unidiomatic.  
+Yogofn offers a few slice generating operations as alternatives to Go's for-loops.
 
 For instance, let's find the max daily temperature range given two parallel lists of low and high daily temperatures.
 Here's standard Go code given two float64 slices.
@@ -36,6 +36,8 @@ A companion package is yogofn/reducers which contains simple but common scalar r
 
 Not suprisingly, reflection slows down standard Go about 200 times.  Using Go's type switch, a few optimizations 
 were placed into Map/Filter/Reduce 
-for common data types float64, int, and string.  They run at normal speed.  There are no optimizations for Every or Any because I cannot think of a use case for the simple types.  Float32 optimizations will likely be added later for use within GopherJS.
+for common data types float64, int, and string.  Those operations are implemented as normal typed Go loops.
+
+
 
 
