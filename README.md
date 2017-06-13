@@ -1,6 +1,9 @@
 # yogofn
 Functional Map/Reduce/Filter for Golang
 
+### install
+go get github.com/johncgriffin/yogofn
+
 Yogofn offers a few slice generating operations as alternatives to Go's for-loops.
 
 For instance, let's find the max daily temperature range given two parallel lists of low and high daily temperatures.
